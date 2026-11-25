@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decay — notes with a life: firing, living, and soil</title>
+<meta name="description" content="Notes that sit at temperature before you can act on them, grow with attention, and compost into a searchable soil instead of disappearing. Offline, on device.">
+<meta name="theme-color" content="#101418">
+<style>
+  :root{--bg:#f6f5f2;--panel:#fff;--ink:#14181d;--muted:#5d666f;--line:#d9d6cf;--accent:#5a6b2f}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+  main{max-width:780px;margin:0 auto;padding:48px 20px 64px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
+  .lede{font-size:18px;color:var(--muted);margin:0 0 26px}
+  .cta{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:9px}
+  .status{margin:26px 0;padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:9px;background:var(--panel);font-size:14px}
+  .status b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+  h2{font-size:17px;margin:30px 0 8px}
+  ul{padding-left:20px}li{margin:4px 0}
+  code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;background:#eeede9;padding:1px 5px;border-radius:4px}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+  th,td{text-align:left;border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Decay</h1>
+  <p class="lede">Notes with a life. They sit at temperature before you can act on them, they grow with attention,
+  and when they are neglected they compost into a soil you can still search.</p>
+
+  <a class="cta" href="play/index.html">Open Decay</a>
+
+  <div class="status">
+    <b>Status</b>
+    Built and working offline: notes that fire for a set number of days (locked, but open to additions), cool onto the
+    shelf, then live or fade by attention; vitality from recency, reopens and links; compost into a searchable soil;
+    re-seeding with links intact; a spore that resurfaces a buried note; export of the whole colony.
+    <br><b>Release</b>: Windows EXE, Android APK and Linux binary, built from this source in CI — <a href="https://github.com/drsamonline/app-decay/releases/tag/app-latest">app-latest</a>.
+    <br><b>Not built</b>: inferred links. The Mycelium prompt asks for on-device embeddings to guess connections; there is no
+    embedding model in this estate, so every link is one you made, and the app says so.
+  </div>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Write a note, or an idea with a firing time — it is locked until it cools, and it can accrue additions meanwhile.</li>
+    <li>Vitality from three things only: how recently you touched it, how often you reopened it, how many links it has.</li>
+    <li>Neglect past the rot threshold moves a note out of the living view and into the soil — nothing is deleted.</li>
+    <li>Search spans the living notes <em>and</em> the soil, so a word only a composted note holds is still findable.</li>
+    <li>Re-seed a composted note and it comes back with its links intact. Or send a spore and let the soil choose.</li>
+  </ul>
+
+  <h2>What it will not do</h2>
+  <ul>
+    <li><strong>Infer your links.</strong> No embeddings, no similarity, no model — a link is a decision you made.</li>
+    <li><strong>Delete anything.</strong> The soil keeps what the living view let go of.</li>
+    <li><strong>Run the rot on a store it could not write.</strong> If the save fails, nothing decays either — otherwise it would compost notes it never saved.</li>
+    <li><strong>Treat an unreadable colony as an empty one.</strong> That would decay the difference away; it is reported and offered for export instead.</li>
+    <li><strong>Use a model, a key or a network.</strong> No <code>fetch</code>, no endpoint; CSP <code>connect-src 'none'</code>.</li>
+  </ul>
+
+  <h2>When things go wrong</h2>
+  <table>
+    <tr><th>Case</th><th>What happens</th></tr>
+    <tr><td>Bad input</td><td>A note with no body is refused. A firing time of zero — an idea that never comes due — is refused with the rule named, and a firing time that would cool in the past is refused with the date shown.</td></tr>
+    <tr><td>No network</td><td>Nothing changes. The colony is on the device.</td></tr>
+    <tr><td>Storage full or unavailable</td><td>The note is not written and the app says so; the rot does not run on a store it could not write.</td></tr>
+    <tr><td>Corrupt saved state</td><td>Reported and offered for export. The app never treats an unreadable store as an empty one.</td></tr>
+  </table>
+
+  <h2>How to run it</h2>
+  <ul>
+    <li><strong>Here</strong>: <a href="play/index.html">play/index.html</a>, or install it from your browser's menu.</li>
+    <li><strong>Offline file</strong>: open <code>docs/play/index.html</code> straight from disk.</li>
+    <li><strong>Tests</strong>: <code>node tests/self-tests.js</code> — the spec's countable “done means” is asserted there, including the five reopens and the soil search.</li>
+  </ul>
+
+  <footer>
+    PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin ·
+    <a href="https://github.com/drsamonline/app-decay">source</a>
+  </footer>
+</main>
+</body>
+</html>

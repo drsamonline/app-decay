@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decay — notes with a life: firing, living, and soil</title>
+<meta name="description" content="Notes that have a life: they must sit at temperature before you can act on them, they grow with attention, and they compost into a searchable soil instead of disappearing.">
+<meta name="theme-color" content="#101418">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  :root{--bg:#f6f5f2;--panel:#fff;--ink:#14181d;--muted:#5d666f;--line:#d9d6cf;--accent:#5a6b2f;--accent-ink:#fff;
+        --fire:#a2561f;--live:#5a6b2f;--fading:#8a7a2a;--soil:#5b4a3a;
+        --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+        --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px}
+  header.top{border-bottom:1px solid var(--line);background:var(--panel);padding:14px 20px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+  header.top h1{font-size:18px;margin:0;letter-spacing:-.01em}
+  header.top p{margin:0;color:var(--muted);font-size:13px}
+  header.top a{margin-left:auto;color:var(--accent);font-size:13px;text-decoration:none;border-bottom:1px solid currentColor}
+  main{max-width:1040px;margin:0 auto;padding:20px}
+  .tabs{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+  .tab{font:inherit;font-size:14px;padding:9px 14px;border:1px solid transparent;border-bottom:none;background:none;color:var(--muted);cursor:pointer;border-radius:8px 8px 0 0}
+  .tab[aria-selected="true"]{background:var(--panel);border-color:var(--line);color:var(--ink);font-weight:600;margin-bottom:-1px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 6px}
+  .card p.claim{margin:0 0 8px;color:var(--muted);font-size:13px}
+  label.fld{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.06em}
+  textarea,input[type=text],input[type=number]{font:inherit;font-size:14px;width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:inherit}
+  textarea{font-size:14px;line-height:1.55;resize:vertical}
+  button{font:inherit;font-size:13px;padding:8px 13px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+  button.small{padding:3px 8px;font-size:12px}
+  .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .bar .grow{flex:1}
+  .hint{color:var(--muted);font-size:12px}
+  .status{margin:10px 0;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-size:13px;display:none}
+  .status.show{display:block}
+  .status.bad{border-color:#e3b7b7;background:#fdf3f3;color:#7d1f1f}
+  .status.ok{border-color:#b7d8cd;background:#f2f9f6;color:#14503f}
+  .status.warn{border-color:#e8d5ae;background:#fdf8ee;color:#6b4700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:10px}
+  .note{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfaf8;cursor:pointer;position:relative;transition:border-color .15s}
+  .note:hover{border-color:var(--muted)}
+  .note .body{font-size:14px;margin:0 0 8px}
+  .note .meta{font-size:11px;color:var(--muted);font-family:var(--mono);display:flex;gap:8px;flex-wrap:wrap}
+  .note.firing{border-left:4px solid var(--fire);background:#fdf7f2}
+  .note.live{border-left:4px solid var(--live)}
+  .note.fading{border-left:4px solid var(--fading);opacity:.75}
+  .note.soil{border-left:4px solid var(--soil);background:#f6f2ee}
+  .note.strong{box-shadow:0 1px 0 var(--line), 0 0 0 2px rgba(90,107,47,.08)}
+  .badge{font-size:10px;text-transform:uppercase;letter-spacing:.07em;padding:2px 7px;border-radius:999px;background:#ecebe6;color:var(--muted)}
+  .badge.fire{background:#fbeadf;color:var(--fire)}
+  .badge.live{background:#e9f0dd;color:var(--live)}
+  .badge.fading{background:#f7f1d8;color:var(--fading)}
+  .badge.soil{background:#eee7e1;color:var(--soil)}
+  .meter{height:4px;border-radius:2px;background:#e8e6e0;margin-top:8px;overflow:hidden}
+  .meter i{display:block;height:100%;background:var(--live)}
+  .empty{text-align:center;color:var(--muted);padding:20px 14px;font-size:14px}
+  .addbox{margin-top:8px;display:flex;gap:6px}
+  .addbox input{font-size:12px;padding:5px 8px}
+  footer{max-width:1040px;margin:0 auto;padding:22px 20px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  [hidden]{display:none !important}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Decay</h1>
+  <p>Notes with a life: they sit at temperature, they grow with attention, and they compost into a soil you can still search.</p>
+  <a href="../index.html">about</a>
+</header>
+
+<main>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-colony" aria-selected="true" aria-controls="panel-colony">Colony</button>
+    <button class="tab" role="tab" id="tab-soil" aria-selected="false" aria-controls="panel-soil">Soil &amp; search</button>
+  </div>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <!-- ------------------------------------------------------- colony -->
+  <div id="panel-colony" role="tabpanel" aria-labelledby="tab-colony">
+    <section class="card">
+      <h2>Write a note</h2>
+      <p class="claim">Leave the firing time empty for a plain note. Give it a number of days and it becomes an idea that must sit
+        at temperature: locked until it cools, and it can accrue additions meanwhile.</p>
+      <label class="fld" for="body">The note</label>
+      <textarea id="body" rows="3" placeholder="The roof leak comes back every monsoon — ask the terrace neighbour how he sealed his."></textarea>
+      <div class="bar">
+        <div>
+          <label class="fld" for="fireDays" style="margin-top:0">Firing time in days (optional)</label>
+          <input type="number" id="fireDays" min="1" max="60" placeholder="3" style="max-width:160px">
+        </div>
+        <span class="grow"></span>
+        <button class="primary" type="button" id="add">Write it</button>
+        <button type="button" id="example">Load example</button>
+        <button type="button" id="exportJson">Export colony (.json)</button>
+        <button type="button" id="exportMd">Export colony (.md)</button>
+      </div>
+      <div class="hint" id="colonyNote"></div>
+    </section>
+
+    <section class="card">
+      <h2>Firing <small id="fireCount" style="color:var(--muted);font-weight:400"></small></h2>
+      <p class="claim">Waiting is the feature. While a note is firing you can add to it, but you cannot act on it.</p>
+      <div class="grid" id="fireGrid"></div>
+      <div class="empty" id="fireEmpty">Nothing is firing.</div>
+    </section>
+
+    <section class="card">
+      <h2>Living <small id="liveCount" style="color:var(--muted);font-weight:400"></small></h2>
+      <p class="claim">Size, weight and opacity follow vitality: reopening and linking raise it, neglect lowers it. Click a note to reopen it
+        (that is attention), then link it to another.</p>
+      <div class="grid" id="liveGrid"></div>
+      <div class="empty" id="liveEmpty">Nothing living yet. Write a note above.</div>
+    </section>
+  </div>
+
+  <!-- --------------------------------------------------------- soil -->
+  <div id="panel-soil" role="tabpanel" aria-labelledby="tab-soil" hidden>
+    <section class="card">
+      <h2>Search everything</h2>
+      <p class="claim">Living notes and composted ones, in one result list. A word that only a composted note holds is still findable —
+        that is why the soil exists instead of a delete button.</p>
+      <div class="bar" style="margin-top:0">
+        <input type="text" id="query" placeholder="a word from a note you half remember" style="max-width:420px">
+        <button class="primary" type="button" id="doSearch">Search</button>
+        <button type="button" id="spore">Send a spore</button>
+      </div>
+      <div class="grid" id="searchGrid"></div>
+      <div class="hint" id="searchNote"></div>
+    </section>
+
+    <section class="card">
+      <h2>The soil <small id="soilCount" style="color:var(--muted);font-weight:400"></small></h2>
+      <p class="claim">Composted notes keep their links. Re-seeding brings one back into the living view with those links intact.</p>
+      <div class="grid" id="soilGrid"></div>
+      <div class="empty" id="soilEmpty">The soil is empty. Notes fall here when their vitality drops below the rot threshold.</div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  Decay keeps one colony on this device: nothing is deleted, nothing is uploaded, and no model guesses your links — you make them.
+  <br>PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin
+</footer>
+
+<script src="web-kit.js"></script>
+<script src="export-kit.js"></script>
+<script src="decay-core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+NOTICE
+======
+
+Decay — https://github.com/drsamonline/app-decay
+Copyright 2026 Dr Sohil Momin. Licensed under PolyForm Noncommercial 1.0.0 (see LICENSE).
+
+Third-party components
+----------------------
+
+None. Decay has no third-party dependency and no CDN.
+
+Vendored from this project's own kits (same licence, same author), copied verbatim on
+25/11/2026:
+
+- web-kit 0.1.0 — docs/play/web-kit.js — the offline shell, storage helpers and PWA registration
+- export-kit 1.0.0 — docs/play/export-kit.js — Blob download, used to write the colony exports
+
+Neither kit is modified. Neither makes a network request.
+
+On inferred links
+-----------------
+
+The Mycelium prompt asks for on-device embeddings (a small sentence-embedding model) to infer
+links between notes. There is no embedding model in this estate, so Decay does not infer links:
+every link is explicit, made by the person. The vitality model therefore counts only links that
+were decided, which is a smaller claim than the prompt's and an honest one.
