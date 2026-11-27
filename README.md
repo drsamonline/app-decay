@@ -9,6 +9,7 @@ attention, and when they are neglected they **compost** into a soil you can stil
 - **Plan row:** #7 of 37 in `drsamonline/forge` → `QUEUE/PLAN.json`
 - **Specs absorbed:** `app-mycelium` (lead), `app-kiln`
 - **Licence:** PolyForm Noncommercial 1.0.0
+- **Sponsor:** [github.com/sponsors/drsamonline](https://github.com/sponsors/drsamonline) — free, offline, no account
 
 ## Status
 
