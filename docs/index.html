@@ -1,95 +1,96 @@
 <!DOCTYPE html>
 <html lang="en-IN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Decay — notes with a life: firing, living, and soil</title>
-<meta name="description" content="Notes that sit at temperature before you can act on them, grow with attention, and compost into a searchable soil instead of disappearing. Offline, on device.">
-<meta name="theme-color" content="#101418">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decay — notes that fade on purpose</title>
+<meta name="description" content="Notes that fade on purpose, so what survives is what you kept returning to.">
+<meta name="theme-color" content="#f4f3ee">
 <style>
-  :root{--bg:#f6f5f2;--panel:#fff;--ink:#14181d;--muted:#5d666f;--line:#d9d6cf;--accent:#5a6b2f}
+  :root{--bg:#f4f3ee;--panel:#fff;--ink:#1b1d1f;--rule:#e0ded6;--grey:#6c6f73;--live:#2f6b4f;--fading:#9a8b6a;--gone:#b9b6ae;
+        --sans:"Segoe UI",system-ui,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace;
+        --s0:clamp(11px,.4vw + 10px,12.5px);--s1:clamp(14px,.55vw + 12px,16.5px);--s2:clamp(18px,1.2vw + 14px,25px);
+        --display:clamp(28px,5.2vw,60px);--gut:clamp(16px,3.4vw,58px)}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
-  main{max-width:780px;margin:0 auto;padding:48px 20px 64px}
-  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
-  .lede{font-size:18px;color:var(--muted);margin:0 0 26px}
-  .cta{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:9px}
-  .status{margin:26px 0;padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:9px;background:var(--panel);font-size:14px}
-  .status b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
-  h2{font-size:17px;margin:30px 0 8px}
-  ul{padding-left:20px}li{margin:4px 0}
-  code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;background:#eeede9;padding:1px 5px;border-radius:4px}
-  table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
-  th,td{text-align:left;border-bottom:1px solid var(--line);padding:7px 8px;vertical-align:top}
-  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-  a{color:var(--accent)}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  .shelf{max-width:1660px;margin:0 auto;padding:0 0 58px}
+  .bar{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:10px var(--gut);border-bottom:1px solid var(--rule);
+       font-family:var(--mono);font-size:var(--s0);letter-spacing:.15em;text-transform:uppercase;color:var(--grey)}
+  .bar b{color:var(--live);font-weight:400}
+  .head{display:grid;gap:clamp(14px,2.2vw,36px);padding:clamp(22px,3.2vw,50px) var(--gut) clamp(14px,2vw,26px);grid-template-columns:1fr}
+  @media (min-width:960px){.head{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:end}}
+  h1{font-size:var(--display);line-height:1;margin:0;letter-spacing:-.03em;font-weight:700}
+  .head p{margin:10px 0 0;font-size:var(--s2);line-height:1.42;color:var(--grey);max-width:44ch}
+  .rule-box{border:1px solid var(--rule);background:var(--panel);padding:12px 14px;font-family:var(--mono);font-size:var(--s0);color:var(--grey);line-height:1.8}
+  .rule-box b{display:block;color:var(--fading);letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
+  /* the fade: opacity IS the message, so the cards literally fade across the row */
+  .notes{display:grid;gap:clamp(10px,1.4vw,20px);padding:0 var(--gut) clamp(16px,2vw,26px);grid-template-columns:1fr}
+  @media (min-width:620px){.notes{grid-template-columns:repeat(2,1fr)}}
+  @media (min-width:1080px){.notes{grid-template-columns:repeat(4,1fr)}}
+  .n{background:var(--panel);border:1px solid var(--rule);padding:clamp(12px,1.5vw,18px);display:grid;gap:6px}
+  .n .t{font-size:var(--s1);line-height:1.5}
+  .n .m{font-family:var(--mono);font-size:var(--s0);color:var(--grey)}
+  .n.fresh{border-top:3px solid var(--live)}
+  .n.mid{border-top:3px solid var(--fading);opacity:.78}
+  .n.low{border-top:3px solid var(--fading);opacity:.5}
+  .n.gone{border-top:3px solid var(--gone);opacity:.3}
+  .n.gone .t{text-decoration:line-through}
+  .n .bar-a{height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+  .n .bar-a i{display:block;height:100%;background:var(--live)}
+  .n.mid .bar-a i{background:var(--fading);width:55%}
+  .n.low .bar-a i{background:var(--fading);width:22%}
+  .n.gone .bar-a i{background:var(--gone);width:0}
+  .cols{display:grid;gap:clamp(18px,2.6vw,46px);padding:clamp(18px,2.6vw,36px) var(--gut) 0;grid-template-columns:1fr}
+  @media (min-width:860px){.cols{grid-template-columns:repeat(2,1fr)}}
+  @media (min-width:1380px){.cols{grid-template-columns:repeat(3,1fr)}}
+  h2{font-family:var(--mono);font-size:var(--s0);letter-spacing:.16em;text-transform:uppercase;color:var(--live);margin:0 0 6px}
+  p{font-size:var(--s1);line-height:1.72;margin:0 0 12px}
+  .go{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;padding:12px 22px;border-radius:4px;
+      font-family:var(--mono);font-size:var(--s0);letter-spacing:.15em;text-transform:uppercase;margin-top:6px}
+  .go:hover{background:var(--live)}
+  .sponsor{margin:clamp(22px,3vw,38px) var(--gut) 0;border:1px solid var(--rule);border-left:3px solid #c9a05a;background:var(--panel);
+           border-radius:8px;padding:12px 14px;font-size:var(--s0);color:var(--grey);line-height:1.6}
+  .sponsor a{color:var(--fading);text-decoration:none;border-bottom:1px solid currentColor}
+  .foot{margin:14px var(--gut) 0;font-family:var(--mono);font-size:var(--s0);color:#8b8f93;line-height:1.8}
+  .foot a{color:var(--live)}
+</style></head>
+<body><div class="shelf">
+  <div class="bar"><span>notes that fade · keeping is a vote</span><span><b>1</b> fresh · <b>2</b> fading · <b>1</b> gone</span></div>
 
-  .sponsor{margin:24px 0 0;padding:12px 14px;border:1px solid rgba(128,128,128,.35);border-left:3px solid #c9a05a;
-           background:rgba(128,128,128,.07);border-radius:8px;font-size:12.5px;line-height:1.6}
-  .sponsor a{color:#c9a05a;text-decoration:none;border-bottom:1px solid currentColor}
-</style>
-</head>
-<body>
-<main>
-  <h1>Decay</h1>
-  <p class="lede">Notes with a life. They sit at temperature before you can act on them, they grow with attention,
-  and when they are neglected they compost into a soil you can still search.</p>
-
-  <a class="cta" href="play/index.html">Open Decay</a>
-
-  <div class="status">
-    <b>Status</b>
-    Built and working offline: notes that fire for a set number of days (locked, but open to additions), cool onto the
-    shelf, then live or fade by attention; vitality from recency, reopens and links; compost into a searchable soil;
-    re-seeding with links intact; a spore that resurfaces a buried note; export of the whole colony.
-    <br><b>Release</b>: Windows EXE, Android APK and Linux binary, built from this source in CI — <a href="https://github.com/drsamonline/app-decay/releases/tag/app-latest">app-latest</a>.
-    <br><b>Not built</b>: inferred links. The Mycelium prompt asks for on-device embeddings to guess connections; there is no
-    embedding model in this estate, so every link is one you made, and the app says so.
+  <div class="head">
+    <div>
+      <h1>Decay</h1>
+      <p>Notes that fade on purpose — so what survives is what you kept coming back to.</p>
+    </div>
+    <div class="rule-box"><b>the rule</b>A note you never open fades to nothing. A note you open again comes back to full. Nothing is ever deleted.</div>
   </div>
 
-  <h2>What it does</h2>
-  <ul>
-    <li>Write a note, or an idea with a firing time — it is locked until it cools, and it can accrue additions meanwhile.</li>
-    <li>Vitality from three things only: how recently you touched it, how often you reopened it, how many links it has.</li>
-    <li>Neglect past the rot threshold moves a note out of the living view and into the soil — nothing is deleted.</li>
-    <li>Search spans the living notes <em>and</em> the soil, so a word only a composted note holds is still findable.</li>
-    <li>Re-seed a composted note and it comes back with its links intact. Or send a spore and let the soil choose.</li>
-  </ul>
+  <div class="notes">
+    <div class="n fresh"><div class="t">The tanker comes Monday — count first</div><div class="bar-a"><i style="width:100%"></i></div><div class="m">opened today · full</div></div>
+    <div class="n mid"><div class="t">Ask Ravi about the godown keys</div><div class="bar-a"><i></i></div><div class="m">last opened 9 days ago</div></div>
+    <div class="n low"><div class="t">That book Aaji mentioned</div><div class="bar-a"><i></i></div><div class="m">last opened 24 days ago</div></div>
+    <div class="n gone"><div class="t">Wifi password for the old router</div><div class="bar-a"><i></i></div><div class="m">faded out · still here, just faint</div></div>
+  </div>
 
-  <h2>What it will not do</h2>
-  <ul>
-    <li><strong>Infer your links.</strong> No embeddings, no similarity, no model — a link is a decision you made.</li>
-    <li><strong>Delete anything.</strong> The soil keeps what the living view let go of.</li>
-    <li><strong>Run the rot on a store it could not write.</strong> If the save fails, nothing decays either — otherwise it would compost notes it never saved.</li>
-    <li><strong>Treat an unreadable colony as an empty one.</strong> That would decay the difference away; it is reported and offered for export instead.</li>
-    <li><strong>Use a model, a key or a network.</strong> No <code>fetch</code>, no endpoint; CSP <code>connect-src 'none'</code>.</li>
-  </ul>
+  <div class="cols">
+    <div>
+      <h2>Fading is the feature</h2>
+      <p>A note you return to comes back to full strength. One you never open goes faint, then invisible — and it is still there, because the app never deletes.</p>
+    </div>
+    <div>
+      <h2>What it refuses</h2>
+      <p>It will not judge you for the notes that faded, and it will not hide one you might still want. The faintest note is one tap from full.</p>
+    </div>
+    <div>
+      <h2>Get it</h2>
+      <p>Offline, on your device, no account.</p>
+      <a class="go" href="play/index.html">open the shelf →</a>
+    </div>
+  </div>
 
-  <h2>When things go wrong</h2>
-  <table>
-    <tr><th>Case</th><th>What happens</th></tr>
-    <tr><td>Bad input</td><td>A note with no body is refused. A firing time of zero — an idea that never comes due — is refused with the rule named, and a firing time that would cool in the past is refused with the date shown.</td></tr>
-    <tr><td>No network</td><td>Nothing changes. The colony is on the device.</td></tr>
-    <tr><td>Storage full or unavailable</td><td>The note is not written and the app says so; the rot does not run on a store it could not write.</td></tr>
-    <tr><td>Corrupt saved state</td><td>Reported and offered for export. The app never treats an unreadable store as an empty one.</td></tr>
-  </table>
-
-  <h2>How to run it</h2>
-  <ul>
-    <li><strong>Here</strong>: <a href="play/index.html">play/index.html</a>, or install it from your browser's menu.</li>
-    <li><strong>Offline file</strong>: open <code>docs/play/index.html</code> straight from disk.</li>
-    <li><strong>Tests</strong>: <code>node tests/self-tests.js</code> — the spec's countable “done means” is asserted there, including the five reopens and the soil search.</li>
-  </ul>
-
-    <div class="sponsor">
+  <div class="sponsor">
     <strong>Sponsor this app.</strong> It is free, offline and has no account. If it earned its keep:
     <a href="https://github.com/sponsors/drsamonline">github.com/sponsors/drsamonline</a>
   </div>
-<footer>
-    PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin ·
-    <a href="https://github.com/drsamonline/app-decay">source</a>
-  </footer>
-</main>
-</body>
-</html>
+  <p class="foot">Windows · Android · Linux at <a href="https://github.com/drsamonline/app-decay/releases/tag/app-latest">app-latest</a> ·
+  PolyForm Noncommercial 1.0.0 · (c) 2026 Dr Sohil Momin</p>
+</div></body></html>
