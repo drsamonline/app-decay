@@ -117,8 +117,8 @@
         var out = D.addToIdea(D.find(state.store, n.id), input.value, now());
         if (!out.ok) { setStatus("bad", out.reason); return; }
         replace(out.note);
-        persist();
-        render();
+        var saved = persist();
+        render();if (saved) 
         setStatus("ok", out.says);
       });
       addBox.appendChild(input);
@@ -199,12 +199,12 @@
     if (!n) return;
     var touched = D.touch(n, now());
     replace(touched);
-    persist();
+    var saved = persist();
     state.selected = touched.id;
     render();
     var others = state.store.notes.filter(function (x) { return x.id !== id && D.stage(x, now()) !== "soil"; });
     if (!others.length) {
-      setStatus("ok", "Reopened: attention raises its vitality. Write another note to be able to link this one.");
+ if (saved)      setStatus("ok", "Reopened: attention raises its vitality. Write another note to be able to link this one.");
       return;
     }
     var pick = window.prompt("Reopened — vitality is now " + D.vitality(touched, now()) +
@@ -215,8 +215,8 @@
     if (!target) { setStatus("bad", "There is no note number " + pick + "."); return; }
     var linked = D.link(state.store, id, target.id);
     if (!linked.ok) { setStatus("bad", linked.reason); return; }
-    persist();
-    render();
+    var saved = persist();
+    render();if (saved) 
     setStatus("ok", linked.says);
   }
 
@@ -226,8 +226,8 @@
     var out = D.reseed(n, now());
     if (!out.ok) { setStatus("bad", out.reason); return; }
     replace(out.note);
-    persist();
-    render();
+    var saved = persist();
+    render();if (saved) 
     setStatus("ok", out.says);
   }
 
@@ -301,8 +301,8 @@
     });
     state.store.notes = made;
     if (made.length >= 2) D.link(state.store, made[0].id, made[2].id);
-    persist();
-    render();
+    var saved = persist();
+    render();if (saved) 
     setStatus("ok", "Example loaded: three invented notes, one of them firing for four days, and one link made.");
   });
 
